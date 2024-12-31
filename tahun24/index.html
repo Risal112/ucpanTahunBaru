@@ -27,16 +27,34 @@
     }
 
     .message h1, .message p {
-      font-size: 3em;
+      font-size: 5vw; /* Responsif berdasarkan lebar viewport */
       color: gold;
       text-shadow: 0 0 10px #fff, 0 0 20px gold;
       margin: 0;
     }
 
     .message p {
-      font-size: 1.5em;
+      font-size: 3vw; /* Responsif berdasarkan lebar viewport */
       color: white;
-      margin: 0;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .message h1, .message p {
+        font-size: 6vw; /* Lebih besar di layar kecil */
+      }
+      .message p {
+        font-size: 4vw;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .message h1 {
+        font-size: 7vw;
+      }
+      .message p {
+        font-size: 5vw;
+      }
     }
   </style>
 </head>
@@ -47,7 +65,6 @@
   </div>
   <canvas id="fireworks"></canvas>
   <script>
-    // Efek mengetik dan menghapus teks
     const messages = [
       "Selamat Tahun Baru 2024!",
       "Semoga impianmu tercapai tahun ini!",
@@ -55,7 +72,7 @@
       "Mari rayakan dengan penuh sukacita!",
       "Semoga kebahagiaan selalu bersamamu!"
     ];
-
+    
     const changingText = document.getElementById("changing-text");
     let messageIndex = 0;
     let text = "";
@@ -72,6 +89,8 @@
             setTimeout(deleteText, 1000);
           }, 2000);
         }
+      } else {
+        setTimeout(deleteText, 100);
       }
     }
 
@@ -86,22 +105,12 @@
 
     setInterval(typeText, 150);
 
-    // Kode efek kembang api
     const canvas = document.getElementById('fireworks');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const explosionSound = new Audio('WhatsApp Audio 2024-12-31 at 14.19.03.mp3');
-
-    function playSound() {
-      if (explosionSound.paused || explosionSound.ended) {
-        explosionSound.currentTime = 0;
-        explosionSound.play().catch(error => {
-          console.error('Audio playback failed:', error);
-        });
-      }
-    }
+    const explosionSound = new Audio('WhatsApp Audio 2024-12-31 at 14.19.03.mp3'); 
 
     class Particle {
       constructor(x, y, color, velocity, life) {
@@ -136,7 +145,7 @@
         this.y = y;
         this.particles = [];
         this.init();
-        playSound();
+        explosionSound.play();
       }
 
       init() {
@@ -176,7 +185,7 @@
       }
 
       draw() {
-        this.particles.forEach(particle => particle.draw());
+        this.particles.forEach((particle) => particle.draw());
       }
     }
 
@@ -187,7 +196,12 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       if (Math.random() < 0.05) {
-        fireworks.push(new Firework(Math.random() * canvas.width, Math.random() * canvas.height));
+        fireworks.push(
+          new Firework(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height
+          )
+        );
       }
 
       fireworks.forEach((firework, index) => {
@@ -203,10 +217,6 @@
     }
 
     animate();
-
-    document.body.addEventListener('click', () => {
-      explosionSound.play();
-    });
   </script>
 </body>
 </html>
